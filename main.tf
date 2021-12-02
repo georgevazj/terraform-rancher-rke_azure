@@ -32,6 +32,7 @@ module "controlplane" {
   version = "0.0.3"
 
   name = "${var.node_pool_name}-control"
+  hostname_prefix = "${var.node_pool_name}-control"
   access_key = var.access_key
   secret_key = var.secret_key
   description = "Control plane pool"
@@ -49,6 +50,7 @@ module "etcd" {
   version = "0.0.3"
 
   name = "${var.node_pool_name}-etcd"
+  hostname_prefix = "${var.node_pool_name}-etcd"
   access_key = var.access_key
   secret_key = var.secret_key
   description = "etcd pool"
@@ -84,16 +86,11 @@ resource "rancher2_cluster_sync" "sync" {
   node_pool_ids = [module.controlplane.node_pool_id,module.etcd.node_pool_id,module.node_pool.node_pool_id]
 }
 
-resource "rancher2_namespace" "cattle-monitoring" {
-  name       = "cattle-monitoring-system"
-  project_id = rancher2_cluster_sync.sync.system_project_id
-}
-
 resource "rancher2_app_v2" "monitoring" {
   cluster_id = rancher2_cluster_sync.sync.cluster_id
   project_id = rancher2_cluster_sync.sync.system_project_id
   name = "rancher-monitoring"
-  namespace = rancher2_namespace.cattle-monitoring.name
+  namespace = "cattle-monitoring-system"
   repo_name = "rancher-monitoring"
   chart_name = "rancher-monitoring-crd"
   chart_version = "100.0.0+up16.6.0"
