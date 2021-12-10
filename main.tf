@@ -85,30 +85,3 @@ resource "rancher2_cluster_sync" "sync" {
   cluster_id = module.rke_cluster.cluster_id
   node_pool_ids = [module.controlplane.node_pool_id,module.etcd.node_pool_id,module.node_pool.node_pool_id]
 }
-
-resource "rancher2_app_v2" "monitoring" {
-  cluster_id = rancher2_cluster_sync.sync.cluster_id
-  project_id = rancher2_cluster_sync.sync.system_project_id
-  name = "rancher-monitoring"
-  namespace = "cattle-monitoring-system"
-  repo_name = "rancher-monitoring"
-  chart_name = "rancher-monitoring-crd"
-  chart_version = "100.0.0+up16.6.0"
-  cleanup_on_fail = true
-}
-
-module "project" {
-  source  = "app.terraform.io/georgevazj-lab/project/rancher"
-  version = "0.0.1"
-
-  access_key = var.access_key
-  api_url    = var.api_url
-  cluster_id = rancher2_cluster_sync.sync.cluster_id
-  name       = var.project_name
-  secret_key = var.secret_key
-}
-
-resource "rancher2_namespace" "app_namespace" {
-  name       = "sampleapp"
-  project_id = module.project.id
-}
