@@ -42,7 +42,7 @@ module "controlplane" {
   is_control_plane = true
   is_worker = false
   is_etcd = false
-  quantity = 3
+  quantity = 2
 }
 
 module "etcd" {
