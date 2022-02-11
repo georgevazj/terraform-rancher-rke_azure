@@ -58,5 +58,5 @@ module "node_pool" {
 
 resource "rancher2_cluster_sync" "sync" {
   cluster_id = module.rke_cluster.cluster_id
-  node_pool_ids = [module.controlplane.node_pool_id,module.etcd.node_pool_id,module.node_pool.node_pool_id]
+  node_pool_ids = [module.node_pool.node_pool_id]
 }
