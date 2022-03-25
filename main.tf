@@ -14,7 +14,7 @@ terraform {
 }
 
 provider "rancher2" {
-  api_url = "https://sanes-rancher.westeurope.cloudapp.azure.com"
+  api_url = var.api_url
   access_key = var.access_key
   secret_key = var.secret_key
   insecure = true
@@ -30,7 +30,7 @@ module "rke_cluster" {
   source = "app.terraform.io/georgevazj-lab/rke_cluster/rancher2"
   version = "0.0.4"
 
-  api_url = "https://sanes-rancher.westeurope.cloudapp.azure.com"
+  api_url = var.api_url
   access_key = var.access_key
   secret_key = var.secret_key
   description = var.description
@@ -42,7 +42,7 @@ module "node_pool" {
   source  = "app.terraform.io/georgevazj-lab/node_pool/rancher2"
   version = "0.0.3"
 
-  api_url = "https://sanes-rancher.westeurope.cloudapp.azure.com"
+  api_url = var.api_url
   name = var.node_pool_name
   access_key = var.access_key
   secret_key = var.secret_key
